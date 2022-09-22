@@ -73,12 +73,15 @@ class AuthController extends Controller
         if ($user) {
             if (Hash::check($request->password,$user->password)) {
                 $token=$user->createToken('auth-token')->plainTextToken;
+                $cookie=cookie('jwt',$token,60*24);
+                // return response()->json([
+                //     'message'=>'login successful',
+                //     'token'=>$token,
+                //     'user'=>$user
+                // ],200);
 
-                return response()->json([
-                    'message'=>'login successful',
-                    'token'=>$token,
-                    'user'=>$user
-                ],200);
+            return ($this->respondWithToken($token))->withCookie($cookie);
+                
             }
            
             
@@ -109,4 +112,12 @@ public function logout(Request $request){
 
 }
 
+protected function respondWithToken($token)
+{
+    return response()->json([
+        'access_token' => $token,
+        'token_type' => 'bearer',
+        'expires_in' => auth()->factory()->getTTL() * 60,
+    ]);
+}
 }

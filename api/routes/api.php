@@ -24,12 +24,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
- Route::post('/auth/register',[AuthController::class,'register']);
- Route::post('/auth/login',[AuthController::class,'login']);
- Route::get('/auth/user',[AuthController::class,'user'])->middleware('auth:sanctum');
- Route::post('/auth/logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
+    Route::post('/auth/register',[AuthController::class,'register']);
+    Route::post('/auth/login',[AuthController::class,'login']);
+    Route::get('/auth/user',[AuthController::class,'user']);
+    Route::post('/auth/logout',[AuthController::class,'logout']);
+
+
 
 Route::resource('users',UserController::class);
 Route::resource('posts',PostController::class);
 Route::resource('categories',CategoryController::class);
 Route::resource('comments',CommentController::class);
+
+Route::get('/token', function (Request $request) {
+    $token = $request->session()->token();
+ 
+    $token = csrf_token();
+ 
+    // ...
+});
