@@ -74,13 +74,13 @@ class AuthController extends Controller
             if (Hash::check($request->password,$user->password)) {
                 $token=$user->createToken('auth-token')->plainTextToken;
                 $cookie=cookie('jwt',$token,60*24);
-                // return response()->json([
-                //     'message'=>'login successful',
-                //     'token'=>$token,
-                //     'user'=>$user
-                // ],200);
+                return response()->json([
+                    'message'=>'login successful',
+                    'token'=>$token,
+                    'user'=>$user
+                ],200);
 
-            return ($this->respondWithToken($token))->withCookie($cookie);
+            // return ($this->respondWithToken($token))->withCookie($cookie);
                 
             }
            
